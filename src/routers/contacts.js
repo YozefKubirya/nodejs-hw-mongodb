@@ -5,10 +5,11 @@ const contactsRouter=Router();
 contactsRouter.get('/',ctrlWrapper(contactsController.getContactsController));
 
 contactsRouter.get('/:id',ctrlWrapper(contactsController.getContactsByIdController));
-export default contactsRouter;
+
 
 contactsRouter.post('/',ctrlWrapper(contactsController.addContactController));
 
 contactsRouter.patch('/:id',ctrlWrapper(contactsController.updateContactController));
 
 contactsRouter.delete('/:id',ctrlWrapper(contactsController.deleteContactController));
+export default contactsRouter;
