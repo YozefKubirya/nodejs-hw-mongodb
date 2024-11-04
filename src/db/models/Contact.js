@@ -29,5 +29,5 @@ const contactSchema= new Schema({
    timestamps: true, // Додає поля createdAt та updatedAt,
  });
 
- const ContactsCollection=model("Contact",contactSchema,"Contacts");
+const ContactsCollection=model("Contact",contactSchema,"Contacts");
 export default ContactsCollection;
