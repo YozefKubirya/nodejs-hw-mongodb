@@ -4,5 +4,4 @@ const boostrap=async()=>{
    await initMongoConnection();
    setupServer();
 };
-boostrap()
-;
+boostrap();
