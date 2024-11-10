@@ -1,5 +1,7 @@
 import { Schema,model } from "mongoose";
-const contactSchema= new Schema({
+import { handleError } from "./hooks.js";
+import { contactTypeList } from "../../constants/contacts.js";
+const contactSchema = new Schema({
    name:{
       type:String,
       required:true,
@@ -19,7 +21,7 @@ const contactSchema= new Schema({
    },
    contactType:{
       type:String,
-      enum:["personal","home",'work'],
+      enum:contactTypeList,
       required:true,
       default:'personal'
    },
@@ -28,6 +30,9 @@ const contactSchema= new Schema({
    versionKey:false,
    timestamps: true, // Додає поля createdAt та updatedAt,
  });
+contactSchema.post('save',handleError);
 
-const ContactsCollection=model("Contact",contactSchema,"Contacts");
+export const sortByList = ["name"];
+
+const ContactsCollection = model("Contact",contactSchema,"Contacts");
 export default ContactsCollection;
