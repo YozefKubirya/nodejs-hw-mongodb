@@ -27,9 +27,15 @@ export const register = async payload => {
       throw createHttpError(409, "Email in use");
    }
    const hashPassword = await bcrypt.hash(password, 10);
+   const newUser = await UserCollection.create({ ...payload, password: hashPassword });
+
+   
+    const { password: _, ...userWithoutPassword } = newUser.toObject();
+
+    return userWithoutPassword;
 
 
-   return UserCollection.create({...payload, password: hashPassword});
+   // return UserCollection.create({...payload, password: hashPassword});
 };
 
 export const login = async ({email,password}) => {
