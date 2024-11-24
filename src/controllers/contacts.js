@@ -4,6 +4,11 @@ import mongoose from 'mongoose';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { sortByList } from '../db/models/Contact.js';
+import * as path from "node:path";
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { saveFileToCloudInary } from '../utils/saveFileToCloudInary.js';
+import { envFunc } from '../utils/env.js';
+const enable_cloudinary = envFunc("ENABLE_CLOUDINARY");
 
 export const getContactsController = async (req,res)=>{
    const { id: userId } = req.user;
@@ -45,7 +50,18 @@ export const getContactsByIdController =async (req,res)=>{
 
 export const addContactController = async (req,res)=>{
    const {id: userId} = req.user;
-   const data = await contactServices.addContact({...req.body,userId});
+   let photo = null;
+
+   if(req.file){
+      if(enable_cloudinary === "true"){
+         photo =  await saveFileToCloudInary(req.file,"photo");
+      }else{
+         await saveFileToUploadDir(req.file);
+         photo = path.join("uploads", req.file.filename);
+      };
+   }
+
+   const data = await contactServices.addContact({...req.body, photo ,userId});
 
    res.status(201).json({
       status:201,
@@ -57,7 +73,17 @@ export const addContactController = async (req,res)=>{
 export const updateContactController = async (req,res)=>{
    const {id: _id} = req.params;
    const { id: userId } = req.user;
-   const result = await contactServices.updateContact({_id, userId, payload:req.body});
+   let photo = null;
+
+   if (req.file) {
+      if (enable_cloudinary === "true") {
+         photo = await saveFileToCloudInary(req.file, "photo");
+      } else {
+         await saveFileToUploadDir(req.file);
+         photo = path.join("uploads", req.file.filename);
+      }
+   }
+   const result = await contactServices.updateContact({_id, userId, payload: { ...req.body, ...(photo && { photo }) },});
 
    if(!result){
       throw createHttpError(404,'Contact not found');
