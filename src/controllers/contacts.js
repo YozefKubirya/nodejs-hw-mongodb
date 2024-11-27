@@ -78,12 +78,14 @@ export const updateContactController = async (req,res)=>{
    if (req.file) {
       if (enable_cloudinary === "true") {
          photo = await saveFileToCloudInary(req.file, "photo");
+
       } else {
          await saveFileToUploadDir(req.file);
          photo = path.join("uploads", req.file.filename);
       }
    }
-   const result = await contactServices.updateContact({_id, userId, payload: { ...req.body, ...(photo && { photo }) },});
+   console.log(photo);
+   const result = await contactServices.updateContact({_id, userId, payload: { ...req.body, photo},});
 
    if(!result){
       throw createHttpError(404,'Contact not found');
