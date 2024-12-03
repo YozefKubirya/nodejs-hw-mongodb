@@ -11,3 +11,5 @@ export const SMTP = {
 export const TEMPS_UPLOADS_DIR = path.resolve('temps');
 
 export const UPLOADS_DIR = path.resolve('uploads');
+
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');

@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import { SMTP } from "../constants/index.js";
 import  {envFunc} from "../utils/env.js";
 import { sendEmail } from "../utils/sendMail.js";
+import { validateCode, getUserNameFromGoogleTokenPayload } from "../utils/googleOAuth2.js";
 
 const createSession = () => {
    const accessToken = randomBytes(30).toString('base64');
@@ -156,3 +157,36 @@ export const resetPassword = async (payload) => {
      { password: encryptedPassword },
    );
  };
+
+export const loginOrRegisterWithGoogle = async code => {
+  const loginTicket = await validateCode(code);
+  const payload = loginTicket.getPayload();
+  if(!payload) {
+   throw createHttpError(401);
+  }
+  let user = await UserCollection.findOne({
+   email: payload.email,
+  });
+  if(!user) {
+   const password = await bcrypt.hash(randomBytes(10),10);
+   const username = getUserNameFromGoogleTokenPayload(payload);
+
+   user = UserCollection.create({
+      email: payload.email,
+      username,
+      password,
+
+   });
+
+  };
+
+  const newSession = createSession();
+
+   return SessionCollection.create({
+      userId:user.id,
+      ...newSession
+   });
+
+};
+
+
