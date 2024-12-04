@@ -4,6 +4,7 @@ required:
   - name
   - phoneNumber
   - contactType
+  - isFavourite
   - userId
 properties:
   _id:
@@ -26,6 +27,10 @@ properties:
     description: "Contact's age"
     type: string
     enum: ['personal','home','work']
+  isFavourite:
+    description: "Favourite contact"
+    type: boolean
+    example: false
   userId:
     description: "Contact's parent id"
     type: string
