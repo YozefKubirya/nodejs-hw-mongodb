@@ -14,8 +14,8 @@ tags:
     description: Auth operations.
 
 servers:
-  - url: http://localhost:3000
   - url: https://swagger-rest-api.onrender.com
+  - url: http://localhost:3000
 paths:
   /contacts:
     get:
