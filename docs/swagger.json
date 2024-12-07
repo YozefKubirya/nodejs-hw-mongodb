@@ -78,27 +78,6 @@
               ],
               "example": "asc"
             }
-          },
-          {
-            "in": "query",
-            "name": "contactType",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "personal",
-                "home",
-                "work"
-              ],
-              "example": "personal"
-            }
-          },
-          {
-            "in": "query",
-            "name": "isFavourite",
-            "schema": {
-              "type": "boolean",
-              "example": false
-            }
           }
         ],
         "responses": {
@@ -520,7 +499,6 @@
           "name",
           "phoneNumber",
           "contactType",
-          "isFavourite",
           "userId"
         ],
         "properties": {
